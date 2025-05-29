@@ -5,7 +5,7 @@ import numpy as np
 app = Flask(__name__)
 
 # Load the pre-trained XGBoost model at startup
-MODEL_PATH = "xgb_best.joblib"
+MODEL_PATH = "ml_models/xgb_best_with_null.joblib"
 model = joblib.load(MODEL_PATH)
 
 @app.route("/", methods=["GET"])
@@ -29,8 +29,13 @@ def predict():
     """
     data = request.get_json(force=True)
     features = data.get("features")
+    
+    
     if features is None:
         return jsonify({"error": "Missing 'features' in request body."}), 400
+    
+    features = [np.nan if f is None or f == "null" else f for f in features]
+    
     if not isinstance(features, list):
         return jsonify({"error": "'features' must be a list of numbers."}), 400
 
