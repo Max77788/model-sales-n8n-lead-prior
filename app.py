@@ -58,7 +58,7 @@ def predict():
     return jsonify({"probability": float(proba)}), 200
 
 @app.route("/predict-calibrated", methods=["POST"])
-def predict():
+def predict_calibrated():
     """
     Expects a JSON payload:
     {
